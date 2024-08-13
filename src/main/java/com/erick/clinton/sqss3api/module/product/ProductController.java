@@ -28,12 +28,12 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDocument> update(@PathParam("id") String id, @RequestBody ProductDto productDto){
+    public ResponseEntity<ProductDocument> update(@PathVariable("id") String id, @RequestBody ProductDto productDto){
         return this.productService.update(id,productDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProductDocument> delete(@PathParam("id") String id){
+    public ResponseEntity<ProductDocument> delete(@PathVariable("id") String id){
         return this.productService.delete(id);
     }
 }
