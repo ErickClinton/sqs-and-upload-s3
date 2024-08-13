@@ -1,5 +1,6 @@
 package com.erick.clinton.sqss3api.module.category;
 
+import com.erick.clinton.sqss3api.module.category.dto.CategoryDto;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,6 +15,12 @@ public class CategoryDocument {
     private String description;
 
     private String ownerId;
+
+    public CategoryDocument(CategoryDto createRequestDto) {
+        this.title = createRequestDto.title();
+        this.description = createRequestDto.description();
+        this.ownerId = createRequestDto.ownerId();
+    }
 
     public String getId() {
         return id;

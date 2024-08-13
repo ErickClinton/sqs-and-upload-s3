@@ -1,5 +1,7 @@
 package com.erick.clinton.sqss3api.module.product;
 
+import com.erick.clinton.sqss3api.module.category.CategoryDocument;
+import com.erick.clinton.sqss3api.module.product.dto.ProductDto;
 import jdk.jfr.Category;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,7 +20,22 @@ public class ProductDocument {
 
     private Integer price;
 
-    private Category category;
+    private CategoryDocument category;
+
+    public CategoryDocument getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryDocument category) {
+        this.category = category;
+    }
+
+    public ProductDocument(ProductDto productDto) {
+        this.title = productDto.title();
+        this.description = productDto.description();
+        this.ownerId = productDto.ownerId();
+        this.price = productDto.price();
+    }
 
     public String getId() {
         return id;
@@ -60,11 +77,5 @@ public class ProductDocument {
         this.price = price;
     }
 
-    public Category getCategory() {
-        return category;
-    }
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
 }
