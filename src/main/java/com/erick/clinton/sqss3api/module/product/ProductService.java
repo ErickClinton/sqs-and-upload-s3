@@ -1,5 +1,7 @@
 package com.erick.clinton.sqss3api.module.product;
 
+import com.erick.clinton.sqss3api.module.aws.AwsSnsService;
+import com.erick.clinton.sqss3api.module.aws.dto.MessageDto;
 import com.erick.clinton.sqss3api.module.category.CategoryDocument;
 import com.erick.clinton.sqss3api.module.category.CategoryService;
 import com.erick.clinton.sqss3api.module.category.exceptions.CategoryNotFoundException;
@@ -16,10 +18,12 @@ public class ProductService {
 
     private final CategoryService categoryService;
     private final ProductRepository productRepository;
+    private final AwsSnsService awsSnsService;
 
-    public ProductService(CategoryService categoryService, ProductRepository productRepository) {
+    public ProductService(CategoryService categoryService, ProductRepository productRepository,AwsSnsService awsSnsService) {
         this.categoryService = categoryService;
         this.productRepository = productRepository;
+        this.awsSnsService = awsSnsService;
     }
 
     public ResponseEntity<ProductDocument> create(ProductDto productDto) {
@@ -30,6 +34,7 @@ public class ProductService {
         newProduct.setCategory(categoryDocument);
         this.productRepository.save(newProduct);
 
+        this.awsSnsService.publish(new MessageDto(newProduct.getOwnerId()));
         return ResponseEntity.ok().body(newProduct);
     }
 
@@ -52,6 +57,7 @@ public class ProductService {
 
         this.productRepository.save(productDocument);
 
+        this.awsSnsService.publish(new MessageDto(productDto.ownerId()));
         return ResponseEntity.ok().body(productDocument);
     }
 
@@ -62,4 +68,5 @@ public class ProductService {
         this.productRepository.delete(productDocument);
         return ResponseEntity.noContent().build();
     }
+
 }
