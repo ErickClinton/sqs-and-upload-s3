@@ -2,7 +2,6 @@ package com.erick.clinton.sqss3api.module.product;
 
 import com.erick.clinton.sqss3api.module.category.CategoryDocument;
 import com.erick.clinton.sqss3api.module.product.dto.ProductDto;
-import jdk.jfr.Category;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -29,6 +28,8 @@ public class ProductDocument {
     public void setCategory(CategoryDocument category) {
         this.category = category;
     }
+
+    public ProductDocument(){}
 
     public ProductDocument(ProductDto productDto) {
         this.title = productDto.title();
