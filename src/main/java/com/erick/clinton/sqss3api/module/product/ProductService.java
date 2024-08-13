@@ -41,9 +41,11 @@ public class ProductService {
     public ResponseEntity<ProductDocument> update(String id,ProductDto productDto) {
         ProductDocument productDocument = this.productRepository.findById(id)
                 .orElseThrow(ProductNotFoundException::new);
-        this.categoryService.getById(productDto.categoryId())
-                .ifPresent(productDocument::setCategory);
 
+        if(productDto.categoryId() != null){
+            this.categoryService.getById(productDto.categoryId())
+                    .ifPresent(productDocument::setCategory);
+        }
         if(!productDto.title().isEmpty()) productDocument.setTitle(productDto.title());
         if(!productDto.description().isEmpty()) productDocument.setDescription(productDto.description());
         if(!(productDto.price() == null)) productDocument.setPrice(productDto.price());
