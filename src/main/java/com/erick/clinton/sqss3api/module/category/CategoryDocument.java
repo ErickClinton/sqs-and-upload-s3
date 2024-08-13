@@ -16,10 +16,12 @@ public class CategoryDocument {
 
     private String ownerId;
 
-    public CategoryDocument(CategoryDto createRequestDto) {
-        this.title = createRequestDto.title();
-        this.description = createRequestDto.description();
-        this.ownerId = createRequestDto.ownerId();
+    public CategoryDocument(){}
+
+    public CategoryDocument(CategoryDto categoryDto) {
+        this.title = categoryDto.title();
+        this.description = categoryDto.description();
+        this.ownerId = categoryDto.ownerId();
     }
 
     public String getId() {
