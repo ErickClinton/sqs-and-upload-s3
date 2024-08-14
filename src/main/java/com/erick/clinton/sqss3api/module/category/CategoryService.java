@@ -1,5 +1,7 @@
 package com.erick.clinton.sqss3api.module.category;
 
+import com.erick.clinton.sqss3api.module.aws.AwsSnsService;
+import com.erick.clinton.sqss3api.module.aws.dto.MessageDto;
 import com.erick.clinton.sqss3api.module.category.dto.CategoryDto;
 import com.erick.clinton.sqss3api.module.category.exceptions.CategoryNotFoundException;
 import com.erick.clinton.sqss3api.module.category.repositories.CategoryRepository;
@@ -13,14 +15,17 @@ import java.util.Optional;
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final AwsSnsService awsSnsService;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, AwsSnsService awsSnsService) {
         this.categoryRepository = categoryRepository;
+        this.awsSnsService = awsSnsService;
     }
 
     public ResponseEntity<CategoryDocument> create(CategoryDto categoryDto) {
         CategoryDocument newCategory = new CategoryDocument(categoryDto);
         this.categoryRepository.save(newCategory);
+        this.awsSnsService.publish(new MessageDto(newCategory.toString()));
 
         return ResponseEntity.ok().body(newCategory);
     }
@@ -42,6 +47,7 @@ public class CategoryService {
         if(!categoryDto.description().isEmpty()) categoryDocument.setDescription(categoryDto.description());
 
         this.categoryRepository.save(categoryDocument);
+        this.awsSnsService.publish(new MessageDto(categoryDocument.toString()));
 
         return ResponseEntity.ok().body(categoryDocument);
     }

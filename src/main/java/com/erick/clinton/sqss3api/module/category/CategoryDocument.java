@@ -1,6 +1,7 @@
 package com.erick.clinton.sqss3api.module.category;
 
 import com.erick.clinton.sqss3api.module.category.dto.CategoryDto;
+import org.json.JSONObject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -24,6 +25,17 @@ public class CategoryDocument {
         this.ownerId = categoryDto.ownerId();
     }
 
+    @Override
+    public String toString(){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("title",this.title);
+        jsonObject.put("description",this.description);
+        jsonObject.put("ownerId",this.ownerId);
+        jsonObject.put("id",this.id);
+        jsonObject.put("type","category");
+
+        return jsonObject.toString();
+    }
     public String getId() {
         return id;
     }

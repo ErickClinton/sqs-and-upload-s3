@@ -30,11 +30,11 @@ public class ProductService {
         CategoryDocument categoryDocument = this.categoryService.getById(productDto.categoryId())
                 .orElseThrow(CategoryNotFoundException::new);
 
+        System.out.println(productDto.categoryId());
         ProductDocument newProduct = new ProductDocument(productDto);
-        newProduct.setCategory(categoryDocument);
         this.productRepository.save(newProduct);
 
-        this.awsSnsService.publish(new MessageDto(newProduct.getOwnerId()));
+        this.awsSnsService.publish(new MessageDto(newProduct.toString()));
         return ResponseEntity.ok().body(newProduct);
     }
 
@@ -49,7 +49,8 @@ public class ProductService {
 
         if(productDto.categoryId() != null){
             this.categoryService.getById(productDto.categoryId())
-                    .ifPresent(productDocument::setCategory);
+                    .orElseThrow(CategoryNotFoundException::new);
+            productDocument.setCategoryId(productDto.categoryId());
         }
         if(!productDto.title().isEmpty()) productDocument.setTitle(productDto.title());
         if(!productDto.description().isEmpty()) productDocument.setDescription(productDto.description());
@@ -57,7 +58,7 @@ public class ProductService {
 
         this.productRepository.save(productDocument);
 
-        this.awsSnsService.publish(new MessageDto(productDto.ownerId()));
+        this.awsSnsService.publish(new MessageDto(productDto.toString()));
         return ResponseEntity.ok().body(productDocument);
     }
 
